@@ -10,14 +10,19 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:code-block.helloWorld"
+		"onCommand:code-block.helloWorld",
+		"onCommand:code-block.Test",
+		"onCommand:code-block.ChangeState"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "code-block.helloWorld",
-				"title": "Hello World"
+				"command": "code-block.Test",
+				"title": "Test"
+			},
+			{	"command": "code-block.ChangeState",
+				"title": "Change State"
 			}
 		]
 	},
