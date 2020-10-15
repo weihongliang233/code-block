@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// 分割整个activeEditor的内容（按行），然后逐行执行匹配，从而获得行号
 	const editor = vscode.window.activeTextEditor;
 
-	var reg = /\s*%+\*+%+\s*/
+	var reg = /^\s*%+\*+%+\s*$/
 
 
 	const getLineNumbers = () => {
@@ -72,12 +72,17 @@ export function activate(context: vscode.ExtensionContext) {
 		array = getLineObject.count
 		ProcessLineNumberArray(array, getLineObject.Length);
 	}
-	vscode.workspace.onDidChangeTextDocument(updateLineNumberArray)
+	vscode.window.onDidChangeTextEditorSelection(updateLineNumberArray)
 
 	//接下来实现高亮当前单元格
 	const decorationType = vscode.window.createTextEditorDecorationType({
 		backgroundColor: "#ac72dba8",
 		isWholeLine: true
+	})
+
+	const doNothingDecorationType=vscode.window.createTextEditorDecorationType({
+		isWholeLine:true,
+		backgroundColor:""
 	})
 
 	const highLightCurrentBlock = () => {
@@ -91,12 +96,23 @@ export function activate(context: vscode.ExtensionContext) {
 			let decorationsArray: vscode.DecorationOptions[] = []
 			let decoration={range}
 			decorationsArray.push(decoration)
-			editor.setDecorations(decorationType, decorationsArray)
+			//editor.setDecorations(decorationType,decorationsArray)
+			if (interval[0]==interval[1]) {
+				editor.setDecorations(decorationType,[])
+				editor.setDecorations(doNothingDecorationType,decorationsArray)
+			}
+			else{
+				editor.setDecorations(decorationType,decorationsArray)
+				editor.setDecorations(doNothingDecorationType,[])
+			}
 		}
 	}
 	// 接下来监听选择改变
 	vscode.window.onDidChangeTextEditorSelection(highLightCurrentBlock)
 
+	//以上代码都还没有考虑激活问题，后续加上去应该不难
+
+	//以下来实现快速在单元格之间导航的内容
 
 
 	const test = () => {
