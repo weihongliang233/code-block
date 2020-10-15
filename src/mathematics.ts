@@ -28,3 +28,27 @@ var array=[1,2,3,4];
 ProcessLineNumberArray(array,5);
 
 console.log(array.toString())
+
+
+// 定义一个函数来确定光标所在的区间
+export function Interval(array:number[],CursorLine:number) {
+    if (CursorLine==0) {
+        return [0,0];
+    }
+    else{
+        var last=array[array.length-1]
+        if (CursorLine==last) {
+            return [last,last]
+        }
+        //开始循环
+        else{
+            let index=0
+            while (array[index]<CursorLine) {
+                index++
+                //获取了超前一位的index
+            }
+            return [array[index-1],array[index]]
+        }
+    }
+
+}
