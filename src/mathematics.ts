@@ -46,7 +46,7 @@ export function Interval(array:number[],CursorLine:number) {
     //如果已经出现了分隔符
     else{
         //是否首段
-        if(CursorLine<array[2]){
+        if(CursorLine<array[1]){
             //如果是首段的话
             return [array[0],array[1]];
         }

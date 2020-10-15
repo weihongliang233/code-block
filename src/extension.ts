@@ -106,6 +106,7 @@ export function activate(context: vscode.ExtensionContext) {
 				editor.setDecorations(doNothingDecorationType,[])
 			}
 		}
+		
 	}
 	// 接下来监听选择改变
 	vscode.window.onDidChangeTextEditorSelection(highLightCurrentBlock)
@@ -121,7 +122,7 @@ export function activate(context: vscode.ExtensionContext) {
 			let cursor=editor.selection.active
 			let num=cursor.line
 			let str=num.toString
-			vscode.window.showInformationMessage("asdfsd")
+			vscode.window.showInformationMessage("已经激活")
 		}
 	}
 	
