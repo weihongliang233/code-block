@@ -12,7 +12,7 @@ This is an extension which provide the functionality of splitting the code file 
 
 - Quickly navigate through blocks. If the current state is "code blocks enabled", when you press "ctrl+upArrow"/"ctrl+downArray", the cursor will go to the previous or next block.
 
-  ![HighLight](G:\GitHub Local Repository\code-block\img\HighLight.gif)
+  ![HighLight](img\HighLight.gif)
 
   
 
