@@ -136,7 +136,7 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 					else{
 						//如果不是最后一行,那么往下一格首行移动
-						let newPosition=new vscode.Position(interval[1]+1,0)
+						let newPosition=new vscode.Position(interval[1]+2,0)
 						let newSelection=new vscode.Selection(newPosition,newPosition)
 						editor.selection=newSelection
 					}
@@ -148,7 +148,7 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 					else{
 						//如果还不是最后一格，那么就去到下边界的下一格
-						let newPosition=new vscode.Position(interval[1]+1,0)
+						let newPosition=new vscode.Position(interval[1]+2,0)
 						let newSelection=new vscode.Selection(newPosition,newPosition)
 						editor.selection=newSelection
 					}
@@ -161,12 +161,13 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 				else{
 					//如果还不是最后一格，那么就去到下边界的下一格
-					let newPosition=new vscode.Position(interval[1]+1,0)
+					let newPosition=new vscode.Position(interval[1]+2,0)
 					let newSelection=new vscode.Selection(newPosition,newPosition)
 					editor.selection=newSelection
 				}
 			}
 		}
+		//vscode.window.showInformationMessage("Down已经激活")
 	}
 
 	const navigateThroughBlocksUp=()=>{
@@ -180,18 +181,21 @@ export function activate(context: vscode.ExtensionContext) {
 			else{
 				if(interval[0]==interval[1]){
 					if (array.indexOf(interval[0])>-1){
-						//如果是分隔符,什么也不做
+						//如果是分隔符,往上一格末行
+						let newPosition=new vscode.Position(interval[0]-2,0)
+						let newSelection=new vscode.Selection(newPosition,newPosition)
+						editor.selection=newSelection
 					}
 					else{
 						//如果不是分隔符，那么当做单元格来处理,去到上一格的末行
-						let newPosition=new vscode.Position(interval[0]-1,0)
+						let newPosition=new vscode.Position(interval[0]-2,0)
 						let newSelection=new vscode.Selection(newPosition,newPosition)
 						editor.selection=newSelection
 					}
 				}
 				else{
 					//此时肯定在单元格之中
-					let newPosition=new vscode.Position(interval[0]-1,0)
+					let newPosition=new vscode.Position(interval[0]-2,0)
 					let newSelection=new vscode.Selection(newPosition,newPosition)
 					editor.selection=newSelection
 				}
@@ -219,7 +223,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const registerChangeState = vscode.commands.registerCommand("code-block.ChangeState", ChangeState);
 	context.subscriptions.push(registerChangeState)
 
-	const registernavigateThroughBlocksDown=vscode.commands.registerCommand("code-block.navigateThroughBlocksUp",navigateThroughBlocksUp)
+	const registernavigateThroughBlocksDown=vscode.commands.registerCommand("code-block.navigateThroughBlocksDown",navigateThroughBlocksDown)
 	context.subscriptions.push(registernavigateThroughBlocksDown)
 
 	const registernavigateThroughBlocksUp=vscode.commands.registerCommand("code-block.navigateThroughBlocksUp",navigateThroughBlocksUp)

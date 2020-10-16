@@ -23,6 +23,24 @@
 			},
 			{	"command": "code-block.ChangeState",
 				"title": "Change State"
+			},
+			{
+				"command": "code-block.navigateThroughBlocksUp",
+				"title": "navigate through blocks up"
+			},
+			{
+				"command": "code-block.navigateThroughBlocksDown",
+				"title": "navigate Through BlocksDwon"
+			}
+		],
+		"keybindings":[
+			{
+				"command":"code-block.navigateThroughBlocksUp",
+				"key":"ctrl+up"
+			},
+			{
+				"command":"code-block.navigateThroughBlocksDown",
+				"key":"ctrl+down"
 			}
 		]
 	},
