@@ -2,6 +2,8 @@
 
 This is an extension which provide the functionality of splitting the code file into small blocks and manipulate with it (something like Jupyter).
 
+"ctrl+shift+p" and execute the command "Change State" to enable the extension.
+
 ## Features
 
 - Splitting the code file into blocks with regular expression. By now I use the MATLAB comment "%**%"
