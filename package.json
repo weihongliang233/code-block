@@ -1,4 +1,9 @@
 {
+	"icon": "img/baseline_code_black_18dp.png",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/weihongliang233/code-block"
+	},
 	"publisher": "weihongliang233",
 	"name": "code-block",
 	"displayName": "Code Block",
