@@ -98,8 +98,15 @@ export function activate(context: vscode.ExtensionContext) {
 			decorationsArray.push(decoration)
 			//editor.setDecorations(decorationType,decorationsArray)
 			if (interval[0]==interval[1]) {
-				editor.setDecorations(decorationType,[])
-				editor.setDecorations(doNothingDecorationType,decorationsArray)
+				//分类讨论 因为如果代码格只有1格的话，也会返回相等
+				if(array.indexOf(interval[0])>-1){
+					editor.setDecorations(decorationType,[])
+					editor.setDecorations(doNothingDecorationType,decorationsArray)
+				}
+				else{
+					editor.setDecorations(decorationType,decorationsArray)
+					editor.setDecorations(doNothingDecorationType,[])	
+				}
 			}
 			else{
 				editor.setDecorations(decorationType,decorationsArray)
@@ -113,8 +120,86 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//以上代码都还没有考虑激活问题，后续加上去应该不难
 
-	//以下来实现快速在单元格之间导航的内容
+	//以下来实现快速在单元格之间导航的内容，分为两部分，经过查找，VScode好像没有直接监听按键行为的api
+	const navigateThroughBlocksDown=()=>{
+		let editor = vscode.window.activeTextEditor
+		if (editor) {
+			let cursor = editor.selection.active;
+			let interval=Interval(array,cursor.line);
 
+			//editor.setDecorations(decorationType,decorationsArray)
+			if (interval[0]==interval[1]) {
+				//分类讨论 因为如果代码格只有1格的话，也会返回相等
+				if(array.indexOf(interval[0])>-1){
+					if(interval[0]==array[array.length-1]){
+						//如果是最后一行的分隔符，那么什么也不做
+					}
+					else{
+						//如果不是最后一行,那么往下一格首行移动
+						let newPosition=new vscode.Position(interval[1]+1,0)
+						let newSelection=new vscode.Selection(newPosition,newPosition)
+						editor.selection=newSelection
+					}
+				}
+				else{
+					//如果是那种单行格子，那么处理方式和其它单元格一样
+					if(interval[1]==array[array.length]){
+						//如果单元格是最后一格的话，那么什么也不做
+					}
+					else{
+						//如果还不是最后一格，那么就去到下边界的下一格
+						let newPosition=new vscode.Position(interval[1]+1,0)
+						let newSelection=new vscode.Selection(newPosition,newPosition)
+						editor.selection=newSelection
+					}
+				}
+			}
+			else{
+				//以下，光标肯定处于单元格
+				if(interval[1]==array[array.length]){
+					//如果单元格是最后一格的话，那么什么也不做
+				}
+				else{
+					//如果还不是最后一格，那么就去到下边界的下一格
+					let newPosition=new vscode.Position(interval[1]+1,0)
+					let newSelection=new vscode.Selection(newPosition,newPosition)
+					editor.selection=newSelection
+				}
+			}
+		}
+	}
+
+	const navigateThroughBlocksUp=()=>{
+		let editor = vscode.window.activeTextEditor
+		if(editor){
+			let cursor = editor.selection.active;
+			let interval=Interval(array,cursor.line);
+			if(interval[0]==0){
+				//什么也不做,因为处于第一段
+			}
+			else{
+				if(interval[0]==interval[1]){
+					if (array.indexOf(interval[0])>-1){
+						//如果是分隔符,什么也不做
+					}
+					else{
+						//如果不是分隔符，那么当做单元格来处理,去到上一格的末行
+						let newPosition=new vscode.Position(interval[0]-1,0)
+						let newSelection=new vscode.Selection(newPosition,newPosition)
+						editor.selection=newSelection
+					}
+				}
+				else{
+					//此时肯定在单元格之中
+					let newPosition=new vscode.Position(interval[0]-1,0)
+					let newSelection=new vscode.Selection(newPosition,newPosition)
+					editor.selection=newSelection
+				}
+			}
+		}
+	}
+
+	
 
 	const test = () => {
 		let editor=vscode.window.activeTextEditor
@@ -134,6 +219,11 @@ export function activate(context: vscode.ExtensionContext) {
 	const registerChangeState = vscode.commands.registerCommand("code-block.ChangeState", ChangeState);
 	context.subscriptions.push(registerChangeState)
 
+	const registernavigateThroughBlocksDown=vscode.commands.registerCommand("code-block.navigateThroughBlocksUp",navigateThroughBlocksUp)
+	context.subscriptions.push(registernavigateThroughBlocksDown)
+
+	const registernavigateThroughBlocksUp=vscode.commands.registerCommand("code-block.navigateThroughBlocksUp",navigateThroughBlocksUp)
+	context.subscriptions.push(registernavigateThroughBlocksUp)
 
 }
 
