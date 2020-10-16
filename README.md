@@ -14,6 +14,8 @@ This is an extension which provide the functionality of splitting the code file 
 
   ![HighLight](./img/HighLight.gif)
 
+  **If you cannot see the demo gif here, then go to the Github Repository and read the README** .
+
   
 
 - The above two functionality are optional enabled. The following is always enabled: Select the whole current block. Pressing the "alt+s" will select the whole current block.
