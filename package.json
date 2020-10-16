@@ -17,23 +17,23 @@
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
-			{
-				"command": "code-block.Test",
-				"title": "Test"
-			},
 			{	"command": "code-block.ChangeState",
 				"title": "Change State"
 			},
 			{
 				"command": "code-block.navigateThroughBlocksUp",
-				"title": "navigate through blocks up"
+				"title": "Navigate Through Blocks Up"
 			},
 			{
 				"command": "code-block.navigateThroughBlocksDown",
-				"title": "navigate Through BlocksDwon"
+				"title": "Navigate Through Blocks Dwon"
 			}
 		],
 		"keybindings":[
+			{
+				"command": "code-block.ChangeState",
+				"key": "alt+d"
+			},
 			{
 				"command":"code-block.navigateThroughBlocksUp",
 				"key":"ctrl+up"
