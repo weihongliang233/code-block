@@ -217,7 +217,44 @@ export function activate(context: vscode.ExtensionContext){
 			}
 		}
 	};
+	//以下来实现选择，仿照高亮；但是有所不同，因为这里没法设置whole line，所以我会将前后注释也包括进去
+	const selectCurrentBlock = () => {
 
+		let editor = vscode.window.activeTextEditor;
+		if (editor) {
+			let cursor = editor.selection.active;
+			let interval = Interval(array, cursor.line);
+			//editor.setDecorations(decorationType,decorationsArray)
+			//这里就不判断是否处于enabled状态了
+				if (interval[0] == interval[1]) {
+					//分类讨论 因为如果代码格只有1格的话，也会返回相等
+					if (array.indexOf(interval[0]) > -1) {
+						//什么也不做
+					}
+					else {
+						//首先定义这一行的首位
+						let position1=new vscode.Position(interval[0],0);
+						//然后找到末尾
+						let finalCharacter=editor.document.lineAt(cursor).text.length;
+						let position2=new vscode.Position(interval[0],finalCharacter);
+						let newSelection=new vscode.Selection(position1,position2);
+						editor.selection=newSelection;
+					}
+				}
+				else {
+					//这里可以直接模仿上面的定义
+					let position1=new vscode.Position(interval[0],0);
+					//然后找到末尾
+					let finalCharacter=editor.document.lineAt(cursor).text.length;
+					let position2=new vscode.Position(interval[1],finalCharacter);
+					let newSelection=new vscode.Selection(position1,position2);
+					editor.selection=newSelection;
+				}
+			
+
+		}
+
+	};
 
 	//  以下是注册命令的部分
 
@@ -229,6 +266,10 @@ export function activate(context: vscode.ExtensionContext){
 
 	const registernavigateThroughBlocksUp = vscode.commands.registerCommand("code-block.navigateThroughBlocksUp", navigateThroughBlocksUp);
 	context.subscriptions.push(registernavigateThroughBlocksUp);
+
+	const registerselectCurrentBlock=vscode.commands.registerCommand("code-block.selectCurrentBlock",selectCurrentBlock);
+	context.subscriptions.push(registerselectCurrentBlock);
+
 
 }
 

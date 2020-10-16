@@ -28,6 +28,10 @@
 			{
 				"command": "code-block.navigateThroughBlocksDown",
 				"title": "Navigate Through Blocks Dwon"
+			},
+			{
+				"command": "code-block.selectCurrentBlock",
+				"title": "Select Current Block"
 			}
 		],
 		"keybindings":[
@@ -42,6 +46,10 @@
 			{
 				"command":"code-block.navigateThroughBlocksDown",
 				"key":"ctrl+down"
+			},
+			{
+				"command": "code-block.selectCurrentBlock",
+				"key": "alt+s"
 			}
 		]
 	},
