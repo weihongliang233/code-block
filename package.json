@@ -1,4 +1,5 @@
 {
+	"publisher": "weihongliang233",
 	"name": "code-block",
 	"displayName": "Code Block",
 	"description": "It's an extension to split code into blocks. One can highlight current block, pass the text to other programs and so on.",
