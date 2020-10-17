@@ -10,9 +10,9 @@ This is an extension which provide the functionality of splitting the code file 
 
 - Highlighting the current block (where the cursor point to). If you don't need this function, you can disable/enable it by pressing "alt+d". The status bar will show the current state.
 
-- Quickly navigate through blocks. If the current state is "code blocks enabled", when you press "ctrl+upArrow"/"ctrl+downArray", the cursor will go to the previous or next block.
+- Quickly navigate through blocks. If the current state is "code blocks enabled", when you press "ctrl+upArrow"/"ctrl+downArrow", the cursor will go to the previous or next block.
 
-  ![HighLight](./img/HighLight.gif)
+  
 
   **If you cannot see the demo gif here, then go to the Github Repository and read the README** .
 
