@@ -31,14 +31,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 	// 分割整个activeEditor的内容（按行），然后逐行执行匹配，从而获得行号
-	const editor = vscode.window.activeTextEditor;
+	//const editor = vscode.window.activeTextEditor;
 
 	var reg = /^\s*%+\*+%+\s*$/;
 
 
-	const getLineNumbers = () => {
+	const getLineNumbers = (editor:vscode.TextEditor) => {
 
-		if (editor) {
+		
 			var text = editor.document.getText();
 			var reshapedText = text.split("\n");
 			var Length = reshapedText.length;
@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			}
 			return { count, Length };
-		}
+		
 	};
 
 	//接下来处理头尾行，只是编写一个函数
@@ -64,19 +64,23 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//初始化一组变量
 
+	/*
 	var getLineObject: any = getLineNumbers();
 	if (getLineObject) {
 		var array = getLineObject.count;
 		ProcessLineNumberArray(array, getLineObject.Length);
 	}
+	*/
 
 	//定义一个listener函数来监听文本的改变
+	/*
 	const updateLineNumberArray = () => {
 		getLineObject = getLineNumbers();
 		array = getLineObject.count;
 		ProcessLineNumberArray(array, getLineObject.Length);
 	};
 	vscode.window.onDidChangeTextEditorSelection(updateLineNumberArray);
+	*/
 
 	//接下来实现高亮当前单元格
 	const decorationType = vscode.window.createTextEditorDecorationType({
@@ -93,6 +97,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 		let editor = vscode.window.activeTextEditor;
 		if (editor) {
+			var getLineObject=getLineNumbers(editor);
+			var array = getLineObject.count;
+			ProcessLineNumberArray(array, getLineObject.Length);
 			let cursor = editor.selection.active;
 			let interval = Interval(array, cursor.line);
 			let position1 = new vscode.Position(interval[0], 0);
@@ -136,6 +143,9 @@ export function activate(context: vscode.ExtensionContext) {
 		if (DecideState() == true) {
 			let editor = vscode.window.activeTextEditor;
 			if (editor) {
+				var getLineObject=getLineNumbers(editor);
+				var array = getLineObject.count;
+				ProcessLineNumberArray(array, getLineObject.Length);
 				let cursor = editor.selection.active;
 				let interval = Interval(array, cursor.line);
 
@@ -190,6 +200,9 @@ export function activate(context: vscode.ExtensionContext) {
 		if (DecideState() == true) {
 			let editor = vscode.window.activeTextEditor;
 			if (editor) {
+				var getLineObject=getLineNumbers(editor);
+				var array = getLineObject.count;
+				ProcessLineNumberArray(array, getLineObject.Length);
 				let cursor = editor.selection.active;
 				let interval = Interval(array, cursor.line);
 				if (interval[0] == 0) {
@@ -225,6 +238,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 		let editor = vscode.window.activeTextEditor;
 		if (editor) {
+			var getLineObject=getLineNumbers(editor);
+			var array = getLineObject.count;
+			ProcessLineNumberArray(array, getLineObject.Length);
 			let cursor = editor.selection.active;
 			let interval = Interval(array, cursor.line);
 			//editor.setDecorations(decorationType,decorationsArray)
