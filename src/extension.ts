@@ -53,34 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
 		
 	};
 
-	//接下来处理头尾行，只是编写一个函数
 
-	//接下来我需要考虑文本头尾为匹配行的情况+一般情况
-
-	//这里将变量暴露在功能模块之外，等下修复;;更新：就是要让它暴露在全文之中。并且监听文本改变的事件，文本一旦改变，立刻更新成
-	//新的匹配数组
-
-	//并且我这里还没有考虑空文本
-
-	//初始化一组变量
-
-	/*
-	var getLineObject: any = getLineNumbers();
-	if (getLineObject) {
-		var array = getLineObject.count;
-		ProcessLineNumberArray(array, getLineObject.Length);
-	}
-	*/
-
-	//定义一个listener函数来监听文本的改变
-	/*
-	const updateLineNumberArray = () => {
-		getLineObject = getLineNumbers();
-		array = getLineObject.count;
-		ProcessLineNumberArray(array, getLineObject.Length);
-	};
-	vscode.window.onDidChangeTextEditorSelection(updateLineNumberArray);
-	*/
 
 	//接下来实现高亮当前单元格
 	const decorationType = vscode.window.createTextEditorDecorationType({
@@ -234,6 +207,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	};
 	//以下来实现选择，仿照高亮；但是有所不同，因为这里没法设置whole line，所以我会将前后注释也包括进去
+	//这是bullshit
 	const selectCurrentBlock = () => {
 
 		let editor = vscode.window.activeTextEditor;
