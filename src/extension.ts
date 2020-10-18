@@ -6,7 +6,7 @@ import { ProcessLineNumberArray, Interval } from './mathematics';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext){
+export function activate(context: vscode.ExtensionContext) {
 	var isBlockState = 1;
 
 	const myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext){
 	var reg = /^\s*%+\*+%+\s*$/;
 
 
-	const getLineNumbers = ()=> {
+	const getLineNumbers = () => {
 
 		if (editor) {
 			var text = editor.document.getText();
@@ -49,7 +49,7 @@ export function activate(context: vscode.ExtensionContext){
 					count.push(index);
 				}
 			}
-			return {count,Length};
+			return { count, Length };
 		}
 	};
 
@@ -63,9 +63,12 @@ export function activate(context: vscode.ExtensionContext){
 	//并且我这里还没有考虑空文本
 
 	//初始化一组变量
-	var getLineObject:any = getLineNumbers();
-	var array = getLineObject.count;
-	ProcessLineNumberArray(array, getLineObject.Length);
+
+	var getLineObject: any = getLineNumbers();
+	if (getLineObject) {
+		var array = getLineObject.count;
+		ProcessLineNumberArray(array, getLineObject.Length);
+	}
 
 	//定义一个listener函数来监听文本的改变
 	const updateLineNumberArray = () => {
@@ -116,9 +119,9 @@ export function activate(context: vscode.ExtensionContext){
 					editor.setDecorations(doNothingDecorationType, []);
 				}
 			}
-			else{
+			else {
 				editor.setDecorations(decorationType, []);
-				editor.setDecorations(doNothingDecorationType,[]);
+				editor.setDecorations(doNothingDecorationType, []);
 			}
 		}
 
@@ -226,31 +229,31 @@ export function activate(context: vscode.ExtensionContext){
 			let interval = Interval(array, cursor.line);
 			//editor.setDecorations(decorationType,decorationsArray)
 			//这里就不判断是否处于enabled状态了
-				if (interval[0] == interval[1]) {
-					//分类讨论 因为如果代码格只有1格的话，也会返回相等
-					if (array.indexOf(interval[0]) > -1) {
-						//什么也不做
-					}
-					else {
-						//首先定义这一行的首位
-						let position1=new vscode.Position(interval[0],0);
-						//然后找到末尾
-						let finalCharacter=editor.document.lineAt(cursor).text.length;
-						let position2=new vscode.Position(interval[0],finalCharacter);
-						let newSelection=new vscode.Selection(position1,position2);
-						editor.selection=newSelection;
-					}
+			if (interval[0] == interval[1]) {
+				//分类讨论 因为如果代码格只有1格的话，也会返回相等
+				if (array.indexOf(interval[0]) > -1) {
+					//什么也不做
 				}
 				else {
-					//这里可以直接模仿上面的定义
-					let position1=new vscode.Position(interval[0],0);
+					//首先定义这一行的首位
+					let position1 = new vscode.Position(interval[0], 0);
 					//然后找到末尾
-					let finalCharacter=editor.document.lineAt(cursor).text.length;
-					let position2=new vscode.Position(interval[1],finalCharacter);
-					let newSelection=new vscode.Selection(position1,position2);
-					editor.selection=newSelection;
+					let finalCharacter = editor.document.lineAt(cursor).text.length;
+					let position2 = new vscode.Position(interval[0], finalCharacter);
+					let newSelection = new vscode.Selection(position1, position2);
+					editor.selection = newSelection;
 				}
-			
+			}
+			else {
+				//这里可以直接模仿上面的定义
+				let position1 = new vscode.Position(interval[0], 0);
+				//然后找到末尾
+				let finalCharacter = editor.document.lineAt(cursor).text.length;
+				let position2 = new vscode.Position(interval[1], finalCharacter);
+				let newSelection = new vscode.Selection(position1, position2);
+				editor.selection = newSelection;
+			}
+
 
 		}
 
@@ -267,7 +270,7 @@ export function activate(context: vscode.ExtensionContext){
 	const registernavigateThroughBlocksUp = vscode.commands.registerCommand("code-block.navigateThroughBlocksUp", navigateThroughBlocksUp);
 	context.subscriptions.push(registernavigateThroughBlocksUp);
 
-	const registerselectCurrentBlock=vscode.commands.registerCommand("code-block.selectCurrentBlock",selectCurrentBlock);
+	const registerselectCurrentBlock = vscode.commands.registerCommand("code-block.selectCurrentBlock", selectCurrentBlock);
 	context.subscriptions.push(registerselectCurrentBlock);
 
 
