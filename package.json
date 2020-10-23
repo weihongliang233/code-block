@@ -55,8 +55,25 @@
 				"command": "code-block.selectCurrentBlock",
 				"key": "alt+s"
 			}
-		]
+		],
+		"configuration":{
+			"title": "Code Blocks",
+			"properties": {
+				"code-block.regularexpression":{
+					"type":"string",
+					"default":"^\\s*%+\\*+%+\\s*$",
+					"description": "Specifies the regular expression used to split the code file into blocks"
+				},
+				"code-block.color":{
+					"type":"string",
+					"default":"#ac72dba8",
+					"description": "Specifies the backgroud color used to highlight the current block. One can select the #RGBA color in other cofigurations in settings.json, because this extension configuration doesn't provide a color picker. "
+
+				}
+			}
+		}
 	},
+
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -p ./",

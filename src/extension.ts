@@ -33,44 +33,85 @@ export function activate(context: vscode.ExtensionContext) {
 	// 分割整个activeEditor的内容（按行），然后逐行执行匹配，从而获得行号
 	//const editor = vscode.window.activeTextEditor;
 
-	var reg = /^\s*%+\*+%+\s*$/;
+	//这里我试图逃避类型检查，因为我不知道如何强制告诉ts regstring不会为undefined.
+	var regstring: any = vscode.workspace.getConfiguration("code-block").get("regularexpression");
+
+	//var reg = /^\s*%+\*+%+\s*$/;
+	var reg:RegExp;
+	const changeReg = () => {
+		if (regstring) {
+			 reg = new RegExp(regstring);
+		}
+		else {
+			 reg = /^\s*%+\*+%+\s*$/;
+		}
+		vscode.window.showInformationMessage("The Regular Expression has changed");
+	};
+	//监听changeReg函数，使得每次修改settings.json它都会立刻生效。
+	changeReg();
+	vscode.workspace.onDidChangeConfiguration(changeReg);
+
+	const getLineNumbers = (editor: vscode.TextEditor) => {
 
 
-	const getLineNumbers = (editor:vscode.TextEditor) => {
-
-		
-			var text = editor.document.getText();
-			var reshapedText = text.split("\n");
-			var Length = reshapedText.length;
-			var count = [];
-			for (let index = 0; index < reshapedText.length; index++) {
-				var element = reshapedText[index];
-				if (reg.test(element)) {
-					count.push(index);
-				}
+		var text = editor.document.getText();
+		var reshapedText = text.split("\n");
+		var Length = reshapedText.length;
+		var count = [];
+		for (let index = 0; index < reshapedText.length; index++) {
+			var element = reshapedText[index];
+			if (reg.test(element)) {
+				count.push(index);
 			}
-			return { count, Length };
-		
+		}
+		return { count, Length };
+
 	};
 
 
 
 	//接下来实现高亮当前单元格
-	const decorationType = vscode.window.createTextEditorDecorationType({
-		backgroundColor: "#ac72dba8",
+
+	//这一段用来实现颜色的实时改变。
+	var color: any = vscode.workspace.getConfiguration("code-block").get("color");
+	if (color === undefined) {
+		color = "#ac72dba8";
+	}
+	var decorationType = vscode.window.createTextEditorDecorationType({
+		backgroundColor: color,
 		isWholeLine: true
 	});
 
-	const doNothingDecorationType = vscode.window.createTextEditorDecorationType({
+	var doNothingDecorationType = vscode.window.createTextEditorDecorationType({
 		isWholeLine: true,
 		backgroundColor: ""
 	});
+
+	const changeColor=()=>{
+		color=vscode.workspace.getConfiguration("code-block").get("color");
+		if (color === undefined) {
+			color = "#ac72dba8";
+		}
+		decorationType = vscode.window.createTextEditorDecorationType({
+			backgroundColor: color,
+			isWholeLine: true
+		});
+		doNothingDecorationType = vscode.window.createTextEditorDecorationType({
+			isWholeLine: true,
+			backgroundColor: ""
+		});
+		
+	};
+
+	vscode.workspace.onDidChangeConfiguration(changeColor);
+
+	//实现完了实时改变颜色的功能
 
 	const highLightCurrentBlock = () => {
 
 		let editor = vscode.window.activeTextEditor;
 		if (editor) {
-			var getLineObject=getLineNumbers(editor);
+			var getLineObject = getLineNumbers(editor);
 			var array = getLineObject.count;
 			ProcessLineNumberArray(array, getLineObject.Length);
 			let cursor = editor.selection.active;
@@ -116,7 +157,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (DecideState() == true) {
 			let editor = vscode.window.activeTextEditor;
 			if (editor) {
-				var getLineObject=getLineNumbers(editor);
+				var getLineObject = getLineNumbers(editor);
 				var array = getLineObject.count;
 				ProcessLineNumberArray(array, getLineObject.Length);
 				let cursor = editor.selection.active;
@@ -173,7 +214,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (DecideState() == true) {
 			let editor = vscode.window.activeTextEditor;
 			if (editor) {
-				var getLineObject=getLineNumbers(editor);
+				var getLineObject = getLineNumbers(editor);
 				var array = getLineObject.count;
 				ProcessLineNumberArray(array, getLineObject.Length);
 				let cursor = editor.selection.active;
@@ -212,7 +253,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		let editor = vscode.window.activeTextEditor;
 		if (editor) {
-			var getLineObject=getLineNumbers(editor);
+			var getLineObject = getLineNumbers(editor);
 			var array = getLineObject.count;
 			ProcessLineNumberArray(array, getLineObject.Length);
 			let cursor = editor.selection.active;
