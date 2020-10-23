@@ -9,7 +9,7 @@
 	"name": "code-block",
 	"displayName": "Code Block",
 	"description": "It's an extension to split code into blocks. One can highlight current block, pass the text to other programs and so on.",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.50.0"
 	},
