@@ -4,7 +4,7 @@ This is an extension which provide the functionality of splitting the code file 
 
 "ctrl+shift+p" and execute the command "Change State" to enable the extension.
 
-## Motion of creating this extension
+## Motivation of creating this extension
 
 Interactive programming has becoming a new trend of programming. Mathematica, IPython (Jupyter) and Matlab Live Script are some examples. They have something in common, they all have structures called code cells or I prefer to call it "code blocks". Each time you can run the whole block. To implement such functionality in VScode is quite reasonable. You may argue that there is already good supplements for juyter notebook in VScode. But my point is that we should be able to do it in the original code file. Not `".ipynb"` but just `".py"`. I have participated in a project [vscode-matlab-interactive-terminal](https://github.com/apommel/vscode-matlab-interactive-terminal). It provide the functionality to run selected matlab code in VScode. But there is issues suggesting a new functionality of [Recognize and run code blocks](https://github.com/apommel/vscode-matlab-interactive-terminal/issues/13). I consider it as a common functionality and build this extension to enable people to split the code file into blocks using regular expressions comments. And the full list of features are as follow.
 
