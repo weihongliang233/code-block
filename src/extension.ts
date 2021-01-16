@@ -11,16 +11,17 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 
+	//	通过奇偶数来判断用户是否需要高亮当前单元格。 设置ChangeState,将它和一个快捷键绑定起来，每当用户按下快捷键的时候，就改变一次状态，状态分为奇偶，分别代表不激活和激活。
 	const DecideState = () => {
 		if (isBlockState % 2 == 0) {
 			myStatusBarItem.text = "Block Enabled";
 			myStatusBarItem.show();
-			return true; //偶数
+			return true; 
 		}
 		else {
 			myStatusBarItem.text = "Block Unabled";
 			myStatusBarItem.show();
-			return false; //奇数
+			return false; 
 		}
 	};
 
@@ -29,21 +30,15 @@ export function activate(context: vscode.ExtensionContext) {
 		DecideState();
 	};
 
-
-	// 分割整个activeEditor的内容（按行），然后逐行执行匹配，从而获得行号
-	//const editor = vscode.window.activeTextEditor;
-
-	//这里我试图逃避类型检查，因为我不知道如何强制告诉ts regstring不会为undefined.
+	//	这里我试图逃避类型检查，因为我不知道如何强制告诉ts regstring不会为undefined.
 	var regstring: any = vscode.workspace.getConfiguration("code-block").get("regularexpression");
-
-	//var reg = /^\s*%+\*+%+\s*$/;
-	var reg:RegExp;
+	var reg: RegExp;
 	const changeReg = () => {
 		if (regstring) {
-			 reg = new RegExp(regstring);
+			reg = new RegExp(regstring);
 		}
 		else {
-			 reg = /^\s*%+\*+%+\s*$/;
+			reg = /^\s*%+\*+%+\s*$/;
 		}
 		vscode.window.showInformationMessage("The Regular Expression has changed");
 	};
@@ -51,9 +46,8 @@ export function activate(context: vscode.ExtensionContext) {
 	changeReg();
 	vscode.workspace.onDidChangeConfiguration(changeReg);
 
-	const getLineNumbers = (editor: vscode.TextEditor) => {
-
-
+	//这个函数用来得到分割符号的位置，提供给后续处理
+	const getLineNumbers = (editor: vscode.TextEditor) => {  
 		var text = editor.document.getText();
 		var reshapedText = text.split("\n");
 		var Length = reshapedText.length;
@@ -65,10 +59,8 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		}
 		return { count, Length };
-
+		//count存储所有分隔符的位置，Length存储总行数
 	};
-
-
 
 	//接下来实现高亮当前单元格
 
@@ -87,8 +79,8 @@ export function activate(context: vscode.ExtensionContext) {
 		backgroundColor: ""
 	});
 
-	const changeColor=()=>{
-		color=vscode.workspace.getConfiguration("code-block").get("color");
+	const changeColor = () => {
+		color = vscode.workspace.getConfiguration("code-block").get("color");
 		if (color === undefined) {
 			color = "#ac72dba8";
 		}
@@ -100,13 +92,15 @@ export function activate(context: vscode.ExtensionContext) {
 			isWholeLine: true,
 			backgroundColor: ""
 		});
-		
 	};
 
 	vscode.workspace.onDidChangeConfiguration(changeColor);
 
 	//实现完了实时改变颜色的功能
 
+	//接下来这一段用来实现高亮单元格
+
+	//从这里开始的许多核心函数都依赖于一些数学处理： 当前光标在哪个区间里？ 每个区间的上下界限在哪里？ 所以我写了一个同目录的mathematica.ts，提供了函数来处理这些数学问题。在继续往下阅读之前请先阅读那个文件。
 	const highLightCurrentBlock = () => {
 
 		let editor = vscode.window.activeTextEditor;
@@ -127,6 +121,7 @@ export function activate(context: vscode.ExtensionContext) {
 				if (interval[0] == interval[1]) {
 					//分类讨论 因为如果代码格只有1格的话，也会返回相等
 					if (array.indexOf(interval[0]) > -1) {
+						//这里的indexOf可能会造成疑惑。用这个条件实际上是在判断光标的位置是否是任何一个分隔符的所在行，如果是的话就返回True。
 						editor.setDecorations(decorationType, []);
 						editor.setDecorations(doNothingDecorationType, decorationsArray);
 					}
@@ -140,6 +135,7 @@ export function activate(context: vscode.ExtensionContext) {
 					editor.setDecorations(doNothingDecorationType, []);
 				}
 			}
+			//如果DecideState是处于不激活状态的话，那么需要抹除之前的装饰，如果不抹除的话它就会留在那里
 			else {
 				editor.setDecorations(decorationType, []);
 				editor.setDecorations(doNothingDecorationType, []);
@@ -147,12 +143,10 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 	};
-	// 接下来监听选择改变
+	// 接下来监听鼠标位置的改变
 	vscode.window.onDidChangeTextEditorSelection(highLightCurrentBlock);
 
-	//以上代码都还没有考虑激活问题，后续加上去应该不难
-
-	//以下来实现快速在单元格之间导航的内容，分为两部分，经过查找，VScode好像没有直接监听按键行为的api
+	//以下来实现快速在单元格之间移动的问题
 	const navigateThroughBlocksDown = () => {
 		if (DecideState() == true) {
 			let editor = vscode.window.activeTextEditor;
@@ -247,10 +241,8 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		}
 	};
-	//以下来实现选择，仿照高亮；但是有所不同，因为这里没法设置whole line，所以我会将前后注释也包括进去
-	//这是bullshit
-	const selectCurrentBlock = () => {
 
+	const selectCurrentBlock = () => {
 		let editor = vscode.window.activeTextEditor;
 		if (editor) {
 			var getLineObject = getLineNumbers(editor);
@@ -259,7 +251,7 @@ export function activate(context: vscode.ExtensionContext) {
 			let cursor = editor.selection.active;
 			let interval = Interval(array, cursor.line);
 			//editor.setDecorations(decorationType,decorationsArray)
-			//这里就不判断是否处于enabled状态了
+			//这里就不判断是否处于enabled状态了`
 			if (interval[0] == interval[1]) {
 				//分类讨论 因为如果代码格只有1格的话，也会返回相等
 				if (array.indexOf(interval[0]) > -1) {
@@ -269,29 +261,25 @@ export function activate(context: vscode.ExtensionContext) {
 					//首先定义这一行的首位
 					let position1 = new vscode.Position(interval[0], 0);
 					//然后找到末尾
-					let finalCharacter = editor.document.lineAt(cursor).text.length;
-					let position2 = new vscode.Position(interval[0], finalCharacter);
+					let finalCharacter = editor.document.lineAt(new vscode.Position(interval[1], 0)).text.length;
+					let position2 = new vscode.Position(interval[1], finalCharacter);
 					let newSelection = new vscode.Selection(position1, position2);
 					editor.selection = newSelection;
 				}
 			}
 			else {
-				//这里可以直接模仿上面的定义
-				let position1 = new vscode.Position(interval[0], 0);
-				//然后找到末尾
-				let finalCharacter = editor.document.lineAt(cursor).text.length;
-				let position2 = new vscode.Position(interval[1], finalCharacter);
-				let newSelection = new vscode.Selection(position1, position2);
-				editor.selection = newSelection;
+					//可以模仿上面的定义
+					let position1 = new vscode.Position(interval[0], 0);
+					//然后找到末尾
+					let finalCharacter = editor.document.lineAt(new vscode.Position(interval[1], 0)).text.length;
+					let position2 = new vscode.Position(interval[1], finalCharacter);
+					let newSelection = new vscode.Selection(position1, position2);
+					editor.selection = newSelection;
 			}
-
-
 		}
-
 	};
 
 	//  以下是注册命令的部分
-
 	const registerChangeState = vscode.commands.registerCommand("code-block.ChangeState", ChangeState);
 	context.subscriptions.push(registerChangeState);
 
