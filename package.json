@@ -45,11 +45,11 @@
 			},
 			{
 				"command":"code-block.navigateThroughBlocksUp",
-				"key":"ctrl+up"
+				"key":"alt+up"
 			},
 			{
 				"command":"code-block.navigateThroughBlocksDown",
-				"key":"ctrl+down"
+				"key":"alt+down"
 			},
 			{
 				"command": "code-block.selectCurrentBlock",
@@ -61,14 +61,16 @@
 			"properties": {
 				"code-block.regularexpression":{
 					"type":"string",
-					"default":"^\\s*%+\\*+%+\\s*$",
+					"default":[
+						"matlab:^\\s*%+\\*+%+\\s*$",
+						"wolfram:\\(\\*\\s\\s\\*\\)"
+					],
 					"description": "Specifies the regular expression used to split the code file into blocks"
 				},
 				"code-block.color":{
 					"type":"string",
 					"default":"#ac72dba8",
 					"description": "Specifies the backgroud color used to highlight the current block. One can select the #RGBA color in other cofigurations in settings.json, because this extension configuration doesn't provide a color picker. "
-
 				}
 			}
 		}
