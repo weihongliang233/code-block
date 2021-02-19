@@ -12,15 +12,17 @@ Interactive programming has becoming a new trend of programming. Mathematica, IP
 
 ## Features and Usage
 
-- Splitting the code file into blocks with regular expression. By now I use the MATLAB comment `%**********%` as default. (There can be one or more `*`  in the middle and one or more `%` at the endpoints). You can specify your own regular expression in the `code-block.regularexpression"` option in `settings.json`. 
+- Splitting the code file into blocks with regular expression. By now I have specified two the default delimiter for MATLAB and Mathematica. For MATLAB, I use  `%**********%` as default. (There can be one or more `*`  in the middle and one or more `%` at the endpoints). You can specify your own regular expression for different programming language in the `code-block.regularexpression"` option in `settings.json`. 
 
 - When your cursor points in a certain block, the block will be highlighted. 
 
-  ![image-20201023224330434](https://raw.githubusercontent.com/weihongliang233/My-Markdown-Figures/master/20201023225547.png)
+  ![image-20201023224521631](https://raw.githubusercontent.com/weihongliang233/My-Markdown-Figures/master/20201023225547-1.png)
 
   The highlight style can be specified by setting the option `code-block.color`.
 
-  Of course if you don't won't this effect, just press `alt+d`. You will see the state of this extension in the status bar. ![image-20201023224521631](https://raw.githubusercontent.com/weihongliang233/My-Markdown-Figures/master/20201023225547-1.png)
+  Of course if you don't won't this effect, just press `alt+d`. You will see the state of this extension in the status bar. 
+
+   ![image-20201023224330434](https://raw.githubusercontent.com/weihongliang233/My-Markdown-Figures/master/20201023225547.png)
 
   When you press `alt +d`, the state switches. But you need to move the cursor to let it take effect.(I set a listener listening to the cursor movement )
 
@@ -38,6 +40,8 @@ The first line of the file should not be the delimiter. (Despite that I didn't f
 
 The source file of this extension uses Chinese comments (Due to my scrappy English). I may translate them into English when I have the time.
 
+If your code file is long and you navigate through the bottom of the editor, the view will not automatically scroll. I'm trying to fix it.
+
 ## Release Notes
 
 ### 0.0.1
@@ -47,3 +51,10 @@ Initial release.
 ### 0.0.2
 
 Adding options to enable users to specify the background color of the highlighted code block and the regular expression of the delimiter.
+
+### 0.0.3
+
+- Better comments (Still in Chinese).
+- Bugs fixing.
+- You can now specify different regular expression delimiter for different programming language.
+- A LICENSE and a Chinese Readme .

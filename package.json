@@ -1,5 +1,5 @@
 {
-	"icon": "img/baseline_code_black_18dp.png",
+	"icon": "img/method-draw-image.png",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/weihongliang233/code-block"
@@ -9,7 +9,7 @@
 	"name": "code-block",
 	"displayName": "Code Block",
 	"description": "It's an extension to split code into blocks. One can highlight current block, pass the text to other programs and so on.",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"engines": {
 		"vscode": "^1.50.0"
 	},
