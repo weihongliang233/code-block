@@ -60,7 +60,7 @@
 			"title": "Code Blocks",
 			"properties": {
 				"code-block.regularexpression":{
-					"type":"string",
+					"type":"array",
 					"default":[
 						"matlab:^\\s*%+\\*+%+\\s*$",
 						"wolfram:\\(\\*\\s\\s\\*\\)"

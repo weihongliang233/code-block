@@ -47,27 +47,25 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const changeReg = () => {
 		let regStrList: string[] | undefined = vscode.workspace
-		.getConfiguration("code-block")
-		.get("regularexpression");
-		if(!regStrList){
-			regStrList=defaultStrList;
+			.getConfiguration("code-block")
+			.get("regularexpression");
+		if (!regStrList) {
+			regStrList = defaultStrList;
 			vscode.window.showInformationMessage("You havn't specify the regular expression delimiters, the defalut rules will be used");
 		}
 		dic = {};
 		for (let str of regStrList) {
 			let language = str.split(":", 1)[0];
-			let reg = str.substring(language.length+1, str.length +1);
+			let reg = str.substring(language.length + 1, str.length + 1);
 			dic[language] = reg;
 		}
 		let editor = vscode.window.activeTextEditor;
 		if (editor) {
 			reg = new RegExp(dic[editor.document.languageId]);
-			if (!reg){
-				reg=new RegExp("");
+			if (!reg) {
+				reg = new RegExp("");
 				vscode.window.showInformationMessage("You havn't specify the regular expression delimiter for the language currently used. By default, \"\" will be used");
 			}
-		} else {
-			vscode.window.showInformationMessage("Please open a file before using the code-block extension");
 		}
 	};
 
