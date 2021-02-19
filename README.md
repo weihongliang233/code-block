@@ -1,5 +1,7 @@
 # code-block README
 
+[中文文档](./README-中文文档.md)
+
 This is an extension which provide the functionality of splitting the code file into small blocks and manipulate with it (something like Jupyter).
 
 "ctrl+shift+p" and execute the command "Change State" to enable the extension.
